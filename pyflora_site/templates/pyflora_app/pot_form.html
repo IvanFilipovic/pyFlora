@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <meta charset="utf-8">
+  <title>PyFlora Posuda</title>
+
+  <style>
+    body {
+      background-color: whitesmoke;
+    }
+    #center {
+    margin: 0 auto;
+    width: 80%;
+    }
+    #border {
+        border: 1px solid #198754;
+        border-radius: 5px;
+    }
+    img {
+      width: 330px;
+      height: 300px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+    <main>
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href='{% url "dashboard" %}'>PyFlora</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          {% if user.is_authenticated %}
+          <ul class="navbar-nav ps-5 ms-5 mb-2 mb-lg-0">
+            <li class="nav-item ">
+              <a class="nav-link active" aria-current="page" href='{% url "plants" %}'>Biljke</a>
+            </li>
+          </ul>
+          <div class="d-flex ps-5 ms-auto mb-2 mb-lg-0">
+            <button class="btn btn-outline-success" type="submit" onclick="location.href='{% url 'logout' %}?next=/';">Odjavite se</button>
+          </div>
+          {% else %}
+          <div class="d-flex ps-5 ms-auto mb-2 mb-lg-0">
+            <button class="btn btn-outline-success" type="submit" onclick="location.href='{% url 'loginpage' %}';">Prijavi se</button>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+    {% load rest_framework %}
+    {% load static %}
+    {% if user.is_authenticated %}
+    <div class="container-lg pt-5">
+        <div class="row row-cols-1 pt-1">
+            <div class="col pt-5">
+                <div class="d-flex justify-content-lg-start py-2">
+                    <h4>Ažurirajte posudu</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-1 pt-5">
+              <div class="col pt-5">
+                  <div id="border" class="row mx-1">
+                      <div class="col-md-6 col-sm-12">
+                          {% if pot.plants_pot %}
+                          <img alt="" src="http://127.0.0.1:8000/media/{{ pot.plants_pot.plant_photo }}">
+                          {% endif %}
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="row">
+                            <div class="d-flex justify-content-center py-4">
+                              <h4>{{ pot.pot_name }}</h4>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <form action='{% url "pot-update" pk=pot.pk %}' method="POST" enctype="multipart/form-data">
+                              <div id="edit_plant" class="d-flex justify-content-center py-3">
+                                {% csrf_token %}
+                                <label for="id_plants_pot">Biljka</label>
+                                <div class="px-2">{{ form.plants_pot }}</div>
+                                <label for="id_pot_name">Ime posude</label>
+                                <div class="px-2">{{ form.pot_name }}</div>
+                              </div>
+                            <div id="plant" class="d-flex justify-content-center py-4">
+                                <div class="px-1"><button class="btn btn-outline-success btn-sm" type="submit">Potvrdite promjene</button></div>
+                                <div class="px-1"><button onclick="location.href='{% url 'dashboard' %}';" class="btn btn-outline-success btn-sm">Odustanite</button></div>
+                            </div>
+                            </form>
+                          </div>
+                          <div class="row">
+                          </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+          <div id="center" class="row mx-auto">
+            <div class="d-flex justify-content-center">
+                <h2>Niste prijavljeni, molimo prijavite se.</h2>
+            </div>
+          </div>
+        </div>
+    </div>
+    {% endif %}
+  </main>
+</body>
+<script>
+$(document).ready(function(){
+ $('#id_plants_pot').addClass('form-select form-select-sm');
+});
+$(document).ready(function(){
+ $('#id_pot_name').addClass('form-control form-control-sm');
+});
+</script>

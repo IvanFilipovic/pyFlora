@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <title>PyFlora Posuda</title>
+  <link rel="stylesheet" href="/static/main.css">
+  <style>
+    body {
+      background-color: whitesmoke;
+    }
+    #center {
+    margin: 0 auto;
+    width: 80%;
+    }
+    #border {
+        border: 1px solid #198754;
+        border-radius: 5px;
+        width: 650px;
+        height: 330px;
+    }
+    img {
+      width: 300px;
+      height: 300px;
+      object-fit: contain;
+    }
+    #svg {
+      width: 100%;
+      height: 100%;
+    }
+    a {
+      text-decoration: none;
+      color: black;
+    }
+    p {
+      padding-top: 75px;
+      padding-left: 75px;
+    }
+    #slika {
+      width: 32px;
+      height: 32px;
+    }
+    h5 {
+      font-size: 16px;
+    }
+    #links > a {
+      font-size: 5px;
+    }
+  </style>
+</head>
+<body onload="statust_result()">
+    <main>
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href='{% url "dashboard" %}'>PyFlora</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          {% if user.is_authenticated %}
+          <ul class="navbar-nav ps-5 ms-5 mb-2 mb-lg-0">
+            <li class="nav-item ">
+              <a class="nav-link active" aria-current="page" href='{% url "plants" %}'>Biljke</a>
+            </li>
+          </ul>
+          <div class="d-flex ps-5 ms-auto mb-2 mb-lg-0">
+            <button class="btn btn-outline-success" type="submit" onclick="location.href='{% url 'logout' %}?next=/';">Odjavite se</button>
+          </div>
+          {% else %}
+          <div class="d-flex ps-5 ms-auto mb-2 mb-lg-0">
+            <button class="btn btn-outline-success" type="submit" onclick="location.href='{% url 'loginpage' %}';">Prijavi se</button>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+    <div id="center" class="row">
+      <div class="col ml-auto pt-5">
+        <div class="float-end">
+          <button id="sync" class="btn btn-outline-success"onclick="sendAJAX()">SYNC</button>
+        </div>
+      </div>
+    </div>
+    {% load rest_framework %}
+    {% load static %}
+    {% if user.is_authenticated %}
+    <div class="container-xxl">
+      <div class="row row-cols-2 pt-1">
+          {% for pot in pots %}
+            <a href="/potdetails/{{ pot.pk }}">
+              <div class="col pt-5">
+                  <div id="border" class="row mx-1">
+                      <div class="col-md-6 col-sm-12">
+                            {% if pot.plants_pot %}
+                            <img alt="" src="media/{{ pot.plants_pot.plant_photo }}">
+                            {% else %}
+                            <p>Posuda je prazna!</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="row py-2">
+                            <div class="d-flex justify-content-center py-4">
+                              <h5>{{ pot.pot_name }}</h5>
+                              <h5></h5>
+                            </div>
+                            <div class="py-4">
+                              <h4 id="pot_id" style="display: none;">{{ pot.id }}</h4>
+                              <!---
+                              
+                              Elementi za vlažnost tla
+                              -->
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_humidity" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'addwater.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Smanjite vlažnost tla</h5>
+                                  </div>
+                                </div>                                
+                              </div> 
+
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_humidity_add" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'addwater.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Povećajte vlažnost tla</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_humidity_good" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'addwater.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Vlažnost tla je optimalna</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+                              <!---
+                              
+                              Elementi za svijetlost
+                              -->
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_lux" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'light-bulb.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Smanjite količinu svijetlosti</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_lux_add" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'light-bulb.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Povećajte količinu svijetlosti</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_lux_good" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'light-bulb.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Količinu svijetlosti je optimalna</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+                              <!---
+                              
+                              Elementi za hranjive tvari
+                              -->
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_minerals" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'fertilizer.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Smanjite količinu hranjivih tvari tla</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_minerals_add" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'fertilizer.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Povećajte količinu hranjivih tvari tla</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_minerals_good" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'fertilizer.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Količina hranjivih tvari tla je optimalna</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+                              <!---
+                              
+                              Elementi za ph tvari
+                              -->
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_ph" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'acid-flask.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Povećajte kiselost tla</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_ph_add" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'acid-flask.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>Smanjite kiselost tla</h5>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="col-md-3 col-sm-3" id="{{ pot.pk }}_ph_good" style="display: none;">
+                                <div class="d-flex">
+                                  <div class="col-md-3 col-lg-3">
+                                    <img id="slika" src="{% static 'acid-flask.png' %}">
+                                  </div>
+                                  <div class="col-md-9 col-lg-9">
+                                    <h5>ph je optimalan</h5>
+                                  </div>
+                                </div>                                
+                              </div>
+
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="d-flex justify-content-center">
+                              {% if pot.plants_pot %}
+                              {% else %}
+                              <p>Dodajte biljku!</p>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+              </a>
+            {% endfor %}
+            <div class="col py-5">
+              <div class="row py-5">
+                  <div class="col py-5">
+                    <div id="center" class="row mx-auto">
+                      <div class="d-flex justify-content-center">
+                        <a href="addpot/"><img id="svg" src="{% static 'plus.svg' %}"></a>
+                      </div>
+                    </div>
+                    <div id="center" class="row mx-auto py-4">
+                      <div class="d-flex justify-content-center"><h4>Dodajte novu PyFlora posudu</h4></div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+          <div id="center" class="row mx-auto">
+            <div class="d-flex justify-content-center">
+                <h2>Niste prijavljeni, molimo prijavite se.</h2>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-4">
+        <div class="pt-5">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <div class="container-xxl pt-5 mt-5">
+      <div id="links" class="d-flex justify-content-center">
+        <a target="_blank" href="https://icons8.com/icon/ZC1Dy7FOw9Xr/fertilizer">Fertilizer icon by</a><a target="_blank" href="https://icons8.com">Icons8</a>
+        <a target="_blank" href="https://icons8.com/icon/ZC1Dy7FOw9Xr/acid_flask">Acid Flask icon by</a><a target="_blank" href="https://icons8.com">Icons8</a>
+        <a target="_blank" href="https://icons8.com/icon/mpkjcEZEyYpL/light-bulb">Light Bulb icon by</a><a target="_blank" href="https://icons8.com">Icons8</a>
+        <a target="_blank" href="https://icons8.com/icon/ZC1Dy7FOw9Xr/wet">Wet icon by</a><a target="_blank" href="https://icons8.com">Icons8</a>
+      </div>
+    </div>
+    </main>
+</body>
+<script>
+let button = document.getElementById("sync");
+button.setAttribute("onClick", "stats()"); 
+const url = 'http://127.0.0.1:8000/potlist';
+
+function ajax(url) {
+    return new Promise(function(resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(this.responseText);
+      };
+      xhr.onerror = reject;
+      xhr.open('GET', url);
+      xhr.send();
+    });
+  }
+
+function statust_result(event) {
+  ajax(url)
+  .then(function(result) {
+    var obj = JSON.parse(result);
+    obj.forEach((item) => {
+      let pot_getter = item.id
+      let plant_getter = item.plants_pot
+      const status_url = 'http://127.0.0.1:8000/plantinpotstatus/'
+      const final_url = status_url + pot_getter + "/" + plant_getter
+      console.log(final_url)
+      let xhr = new XMLHttpRequest()
+      xhr.responseType = 'json';
+      xhr.open('GET', final_url, true)
+      xhr.onload = () => {
+        var stats_objekt = xhr.response;
+        console.log(stats_objekt);
+        var plant_h = stats_objekt.plant_humidity;
+        var plant_l = stats_objekt.plant_lux;
+        var plant_p = stats_objekt.plant_ph;
+        var plant_m = stats_objekt.plant_minerals;
+        var humidity = stats_objekt.humidity_status;
+        var lux = stats_objekt.lux_status;
+        var ph = stats_objekt.ph;
+        var minerals = stats_objekt.minerals;
+
+        var zaliti = plant_h - humidity;
+        var svjetlost = plant_l - lux;
+        var kiselost = plant_p - ph;
+        var hrana = plant_m - minerals;
+        //Vlažnost
+        if (zaliti > 20) {
+          var klasa = pot_getter + "_humidity_add"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        else if (zaliti < -20) {
+          var klasa = pot_getter + "_humidity"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        else {
+          var klasa = pot_getter + "_humidity_good"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        //Svijetlost
+        if (svjetlost > 1600) {
+          var klasa = pot_getter + "_lux_add"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        else if(svjetlost < -1600) {
+          var klasa = pot_getter + "_lux"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        else {
+          var klasa = pot_getter + "_lux_good"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        //Kiselost tla
+        if (kiselost > 3) {
+          var klasa = pot_getter + "_ph_add"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        else if(kiselost < -3) {
+          var klasa = pot_getter + "_ph"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        else {
+          var klasa = pot_getter + "_ph_good"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        //Hranjive tvari
+        if (hrana > 0.0005) {
+          var klasa = pot_getter + "_minerals_add"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        else if (hrana < -0.0005) {
+          var klasa = pot_getter + "_minerals"
+          document.getElementById(klasa).style.display = "inline"
+        }
+        else {
+          var klasa = pot_getter + "_minerals_good"
+          document.getElementById(klasa).style.display = "inline"
+        }
+
+      }
+      xhr.send(null);
+    });
+  });
+}
+
+function stats(event) {
+    ajax(url)
+    .then(function(result) {
+    var obj = JSON.parse(result);
+    console.log(typeof obj);
+    console.log(obj);
+    obj.forEach((item) => {
+      let humidity = Math.floor(Math.random() * (95 - 45) + 45)
+      let lux = Math.floor(Math.random() * (4000 - 1500) + 1500)
+      let ph_status = Math.floor(Math.random() * (13 - 3) + 3)
+      let minerals_status = (Math.random() * (0.0055 - 0.001) + 0.001).toFixed(4)
+      let statsObj = { 
+        pot_senzors_id: item.id,
+        plant_id: item.plants_pot,
+        humidity_status: humidity, 
+        lux_status: lux,
+        ph: ph_status,
+        minerals: minerals_status,
+        }
+        let post = JSON.stringify(statsObj)
+      console.log(statsObj);
+      const url_stats = "http://127.0.0.1:8000/stats"
+      let xhr = new XMLHttpRequest()
+      xhr.open('POST', url_stats, true)
+      xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
+      xhr.send(post);
+      window.location.reload();
+    });
+  })
+  .catch(function() {
+    // An error occurred
+  });
+}
+</script>

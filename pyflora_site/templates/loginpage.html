@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="post" action="">
+    {% csrf_token %}
+    <div class="row justify-content-center">
+      <div class="col-6-md py-5">
+        <input type="text" class="form-control form-control-lg" name ="username" placeholder="User ID" required/>
+      </div>
+    </div>
+    <div class="row justify-content-center py-5">
+      <div class="col-6-md">
+        <input type="password" class="form-control form-control-lg" name ="password" placeholder="Password" required/>
+        {{ login_message }}
+      </div>
+    </div>
+    <div class="row justify-content-center py-5">
+      <div class="d-grid gap-2 col-6 mx-auto">        
+        <button class="btn btn-outline-success" type="submit">Prijava!</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock content %}
