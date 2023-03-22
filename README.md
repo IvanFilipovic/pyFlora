@@ -30,4 +30,4 @@ Kreirati inicijalnog superusera:
 Instancirati server:	
   python manage.py runserver
   
-Za pregled i korištenje aplikacije posjetite http://algebra.pythonanywhere.com/
+Za pregled i korištenje aplikacije posjetite http://algebrav1.pythonanywhere.com/
