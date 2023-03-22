@@ -127,7 +127,7 @@ def lux(request, pot_senzors_id, plant_id):
             'labels': labeli,
             'datasets': [{
                 'label': 'Količina svijetlosti / cd',
-                'backgroundColor': colorPrimary,
+                'backgroundColor': colorPalette[3],
                 'borderColor': colorPalette[6],
                 'data': lux_data,
             }]

@@ -183,7 +183,6 @@
                   </ul>
                   <div class="tab-content" id="pills-tabContent_chart">
                     <div class="tab-pane fade show active" id="pills-humidity-line" role="tabpanel" aria-labelledby="pills-humidity-tab-line">
-                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                       <script type="text/javascript">
                       let pot_id = document.getElementById("pot_id").innerHTML;
                       let plant_id = document.getElementById("plant_id").innerHTML;
@@ -214,7 +213,6 @@
                       <canvas id="chart_humidty" width="500" height="400"></canvas>
                     </div>
                     <div class="tab-pane fade" id="pills-humidity-bar" role="tabpanel" aria-labelledby="pills-humidity-tab-bar">
-                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                       <script type="text/javascript">
                         let pot_id_bar = document.getElementById("pot_id").innerHTML;
                         let plant_id_bar = document.getElementById("plant_id").innerHTML;
@@ -259,7 +257,6 @@
                   </ul>
                   <div class="tab-content" id="pills-tabContent_chart">
                     <div class="tab-pane fade show active" id="pills-lux-line" role="tabpanel" aria-labelledby="pills-lux-tab-line">
-                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                       <script type="text/javascript">
                         let pot_id_lux = document.getElementById("pot_id").innerHTML;
                         let plant_id_lux = document.getElementById("plant_id").innerHTML;
@@ -290,7 +287,6 @@
                       <canvas id="chart_lux" width="500" height="400"></canvas>
                     </div>
                     <div class="tab-pane fade show" id="pills-lux-bar" role="tabpanel" aria-labelledby="pills-lux-tab-bar">
-                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                       <script type="text/javascript">
                         let pot_id_lux_bar = document.getElementById("pot_id").innerHTML;
                         let plant_id_lux_bar = document.getElementById("plant_id").innerHTML;
@@ -333,7 +329,6 @@
                   </ul>
                   <div class="tab-content" id="pills-tabContent_chart">
                     <div class="tab-pane fade show active" id="pills-minerals-line" role="tabpanel" aria-labelledby="pills-minerals-tab-line">
-                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                       <script type="text/javascript">
                         endpoint_minerals = 'http://127.0.0.1:8000/chart/minerals/' + pot_id + '/' + plant_id;
                         function loadChart_minerals(chart, endpoint_minerals) {
@@ -362,7 +357,6 @@
                       <canvas id="chart_minerals" width="500" height="400"></canvas>
                     </div>
                     <div class="tab-pane fade show active" id="pills-minerals-bar" role="tabpanel" aria-labelledby="pills-minerals-tab-bar">
-                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                       <script type="text/javascript">
                         endpoint_minerals_bar = 'http://127.0.0.1:8000/chart/minerals/' + pot_id + '/' + plant_id;
                         function loadChart_minerals_bar(chart, endpoint_minerals_bar) {
@@ -404,7 +398,6 @@
                   </ul>
                   <div class="tab-content" id="pills-tabContent_chart">
                     <div class="tab-pane fade show active" id="pills-ph-line" role="tabpanel" aria-labelledby="pills-ph-tab-line">
-                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                       <script type="text/javascript">
                         endpoint_ph = 'http://127.0.0.1:8000/chart/ph/' + pot_id + '/' + plant_id;
                         function loadChart_ph(chart, endpoint_ph) {
@@ -433,7 +426,6 @@
                       <canvas id="chart_ph" width="500" height="400"></canvas>
                     </div>
                     <div class="tab-pane fade show" id="pills-ph-bar" role="tabpanel" aria-labelledby="pills-ph-tab-bar">
-                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
                       <script type="text/javascript">
                         endpoint_ph_bar = 'http://127.0.0.1:8000/chart/ph/' + pot_id + '/' + plant_id;
                         function loadChart_ph_bar(chart, endpoint_ph_bar) {
