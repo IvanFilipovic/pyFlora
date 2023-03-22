@@ -53,9 +53,8 @@ class StatsList(RetrieveAPIView, RetrieveModelMixin):
     serializer_class = StatusSerializer
     try:
         queryset = Stats.objects.all().latest('stats_time')
-    except OperationalError and ObjectDoesNotExist:
+    except (OperationalError, ObjectDoesNotExist) as error:
         pass
-    
     def get_object(self, queryset=None): 
         pot = self.kwargs.get('pot_senzors_id')
         plant = self.kwargs.get('plant_id')
