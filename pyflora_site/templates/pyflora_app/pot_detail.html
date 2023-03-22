@@ -173,128 +173,296 @@
               </ul>
               <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-humidity" role="tabpanel" aria-labelledby="pills-humidity-tab">
-                  <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-                  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
-                  <script type="text/javascript">
-                    let pot_id = document.getElementById("pot_id").innerHTML;
-                    let plant_id = document.getElementById("plant_id").innerHTML;
-                    endpoint_humidity = 'http://127.0.0.1:8000/chart/humidity/' +pot_id + '/' + plant_id;
-                    function loadChart_humidity(chart, endpoint_humidity) {
-                      $.ajax({
-                        url: endpoint_humidity,
-                        type: "GET",
-                        dataType: "json",
-                        success: (jsonResponse) => {
-                          // Extract data from the response
-                          const title = jsonResponse.title;
-                          const labels = jsonResponse.data.labels;
-                          const datasets = jsonResponse.data.datasets;
+                  <ul class="nav nav-pills mb-3" id="pills-tab" role="humidity_charts">
+                    <li class="nav-item px-1" role="presentation">
+                      <button class="btn btn-outline-success active" id="pills-humidity-tab-line" data-bs-toggle="pill" data-bs-target="#pills-humidity-line" type="button" role="tab" aria-controls="pills-humidity-line" aria-selected="true">Linijski</button>
+                    </li>
+                    <li class="nav-item px-1" role="presentation">
+                      <button class="btn btn-outline-success" id="pills-humidity-tab-bar" data-bs-toggle="pill" data-bs-target="#pills-humidity-bar" type="button" role="tab" aria-controls="pills-humidity-bar" aria-selected="false">Stupičasti</button>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="pills-tabContent_chart">
+                    <div class="tab-pane fade show active" id="pills-humidity-line" role="tabpanel" aria-labelledby="pills-humidity-tab-line">
+                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+                      <script type="text/javascript">
+                      let pot_id = document.getElementById("pot_id").innerHTML;
+                      let plant_id = document.getElementById("plant_id").innerHTML;
+                      endpoint_humidity = 'http://127.0.0.1:8000/chart/humidity/' + pot_id + '/' + plant_id;
+                      function loadChart_humidity(chart, endpoint_humidity) {
+                        $.ajax({
+                          url: endpoint_humidity,
+                          type: "GET",
+                          dataType: "json",
+                          success: (jsonResponse) => {
+                            // Extract data from the response
+                            const title = jsonResponse.title;
+                            const labels = jsonResponse.data.labels;
+                            const datasets = jsonResponse.data.datasets;
 
-                          // Load new data into the chart
-                          chart.options.title.text = title;
-                          chart.options.title.display = true;
-                          chart.data.labels = labels;
-                          datasets.forEach(dataset => {
-                              chart.data.datasets.push(dataset);
-                          });
-                          chart.update();
-                        },
-                        error: () => console.log("Failed to fetch chart data from " + endpoint_humidity + "!")
-                      });}
-                  </script>
-                  <canvas id="chart_humidty" width="500" height="400"></canvas>
+                            // Load new data into the chart
+                            chart.options.title.text = title;
+                            chart.options.title.display = true;
+                            chart.data.labels = labels;
+                            datasets.forEach(dataset => {
+                                chart.data.datasets.push(dataset);
+                            });
+                            chart.update();
+                          },
+                          error: () => console.log("Failed to fetch chart data from " + endpoint_humidity + "!")
+                        });}
+                      </script>
+                      <canvas id="chart_humidty" width="500" height="400"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="pills-humidity-bar" role="tabpanel" aria-labelledby="pills-humidity-tab-bar">
+                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+                      <script type="text/javascript">
+                        let pot_id_bar = document.getElementById("pot_id").innerHTML;
+                        let plant_id_bar = document.getElementById("plant_id").innerHTML;
+                        endpoint_humidity_bar = 'http://127.0.0.1:8000/chart/humidity/' + pot_id_bar + '/' + plant_id_bar;
+                        function loadChart_humidity_bar(chart, endpoint_humidity_bar) {
+                          $.ajax({
+                            url: endpoint_humidity_bar,
+                            type: "GET",
+                            dataType: "json",
+                            success: (jsonResponse) => {
+                              // Extract data from the response
+                              const title = jsonResponse.title;
+                              const labels = jsonResponse.data.labels;
+                              const datasets = jsonResponse.data.datasets;
+
+                              // Load new data into the chart
+                              chart.options.title.text = title;
+                              chart.options.title.display = true;
+                              chart.data.labels = labels;
+                              datasets.forEach(dataset => {
+                                  chart.data.datasets.push(dataset);
+                              });
+                              chart.update();
+                            },
+                            error: () => console.log("Failed to fetch chart data from " + endpoint_humidity + "!")
+                          });}
+                      </script>
+                      <canvas id="chart_humidty_bar" width="500" height="400"></canvas>
+                    </div>
+                  </div>                  
                 </div>
-                <div class="tab-pane fade" id="pills-lux" role="tabpanel" aria-labelledby="pills-lux-tab">
-                  <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-                  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
-                  <script type="text/javascript">
-                    let pot_id_lux = document.getElementById("pot_id").innerHTML;
-                    let plant_id_lux = document.getElementById("plant_id").innerHTML;
-                    endpoint_lux = 'http://127.0.0.1:8000/chart/lux/' + pot_id_lux + '/' + plant_id_lux;
-                    function loadChart_lux(chart, endpoint_lux) {
-                      $.ajax({
-                        url: endpoint_lux,
-                        type: "GET",
-                        dataType: "json",
-                        success: (jsonResponse) => {
-                          // Extract data from the response
-                          const title = jsonResponse.title;
-                          const labels = jsonResponse.data.labels;
-                          const datasets = jsonResponse.data.datasets;
 
-                          // Load new data into the chart
-                          chart.options.title.text = title;
-                          chart.options.title.display = true;
-                          chart.data.labels = labels;
-                          datasets.forEach(dataset => {
-                              chart.data.datasets.push(dataset);
-                          });
-                          chart.update();
-                        },
-                        error: () => console.log("Failed to fetch chart data from " + endpoint_lux + "!")
-                      });}
-                  </script>
-                  <canvas id="chart_lux" width="500" height="400"></canvas>
+
+                <div class="tab-pane fade" id="pills-lux" role="tabpanel" aria-labelledby="pills-lux-tab">
+                  <ul class="nav nav-pills mb-3" id="pills-tab" role="lux_charts">
+                    <li class="nav-item px-1" role="presentation">
+                      <button class="btn btn-outline-success active" id="pills-lux-tab-line" data-bs-toggle="pill" data-bs-target="#pills-lux-line" type="button" role="tab" aria-controls="pills-lux-line" aria-selected="true">Linijski</button>
+                    </li>
+                    <li class="nav-item px-1" role="presentation">
+                      <button class="btn btn-outline-success" id="pills-lux-tab-bar" data-bs-toggle="pill" data-bs-target="#pills-lux-bar" type="button" role="tab" aria-controls="pills-lux-bar" aria-selected="false">Stupičasti</button>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="pills-tabContent_chart">
+                    <div class="tab-pane fade show active" id="pills-lux-line" role="tabpanel" aria-labelledby="pills-lux-tab-line">
+                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+                      <script type="text/javascript">
+                        let pot_id_lux = document.getElementById("pot_id").innerHTML;
+                        let plant_id_lux = document.getElementById("plant_id").innerHTML;
+                        endpoint_lux = 'http://127.0.0.1:8000/chart/lux/' + pot_id_lux + '/' + plant_id_lux;
+                        function loadChart_lux(chart, endpoint_lux) {
+                          $.ajax({
+                            url: endpoint_lux,
+                            type: "GET",
+                            dataType: "json",
+                            success: (jsonResponse) => {
+                              // Extract data from the response
+                              const title = jsonResponse.title;
+                              const labels = jsonResponse.data.labels;
+                              const datasets = jsonResponse.data.datasets;
+
+                              // Load new data into the chart
+                              chart.options.title.text = title;
+                              chart.options.title.display = true;
+                              chart.data.labels = labels;
+                              datasets.forEach(dataset => {
+                                  chart.data.datasets.push(dataset);
+                              });
+                              chart.update();
+                            },
+                            error: () => console.log("Failed to fetch chart data from " + endpoint_lux + "!")
+                          });}
+                      </script>
+                      <canvas id="chart_lux" width="500" height="400"></canvas>
+                    </div>
+                    <div class="tab-pane fade show" id="pills-lux-bar" role="tabpanel" aria-labelledby="pills-lux-tab-bar">
+                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+                      <script type="text/javascript">
+                        let pot_id_lux_bar = document.getElementById("pot_id").innerHTML;
+                        let plant_id_lux_bar = document.getElementById("plant_id").innerHTML;
+                        endpoint_lux_bar = 'http://127.0.0.1:8000/chart/lux/' + pot_id_lux_bar + '/' + plant_id_lux_bar;
+                        function loadChart_lux_bar(chart, endpoint_lux_bar) {
+                          $.ajax({
+                            url: endpoint_lux_bar,
+                            type: "GET",
+                            dataType: "json",
+                            success: (jsonResponse) => {
+                              // Extract data from the response
+                              const title = jsonResponse.title;
+                              const labels = jsonResponse.data.labels;
+                              const datasets = jsonResponse.data.datasets;
+
+                              // Load new data into the chart
+                              chart.options.title.text = title;
+                              chart.options.title.display = true;
+                              chart.data.labels = labels;
+                              datasets.forEach(dataset => {
+                                  chart.data.datasets.push(dataset);
+                              });
+                              chart.update();
+                            },
+                            error: () => console.log("Failed to fetch chart data from " + endpoint_lux_bar + "!")
+                          });}
+                      </script>
+                      <canvas id="chart_lux_bar" width="500" height="400"></canvas>
+                    </div>
+                  </div>
                 </div>
                 <div class="tab-pane fade" id="pills-minerals" role="tabpanel" aria-labelledby="pills-minerals-tab">
-                  <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-                  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
-                  <script type="text/javascript">
-                    endpoint_minerals = 'http://127.0.0.1:8000/chart/minerals/' + pot_id + '/' + plant_id;
-                    function loadChart_minerals(chart, endpoint_minerals) {
-                      $.ajax({
-                        url: endpoint_minerals,
-                        type: "GET",
-                        dataType: "json",
-                        success: (jsonResponse) => {
-                          // Extract data from the response
-                          const title = jsonResponse.title;
-                          const labels = jsonResponse.data.labels;
-                          const datasets = jsonResponse.data.datasets;
+                  <ul class="nav nav-pills mb-3" id="pills-tab" role="minerals_charts">
+                    <li class="nav-item px-1" role="presentation">
+                      <button class="btn btn-outline-success active" id="pills-minerals-tab-line" data-bs-toggle="pill" data-bs-target="#pills-minerals-line" type="button" role="tab" aria-controls="pills-minerals-line" aria-selected="true">Linijski</button>
+                    </li>
+                    <li class="nav-item px-1" role="presentation">
+                      <button class="btn btn-outline-success" id="pills-minerals-tab-bar" data-bs-toggle="pill" data-bs-target="#pills-minerals-bar" type="button" role="tab" aria-controls="pills-minerals-bar" aria-selected="false">Stupičasti</button>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="pills-tabContent_chart">
+                    <div class="tab-pane fade show active" id="pills-minerals-line" role="tabpanel" aria-labelledby="pills-minerals-tab-line">
+                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+                      <script type="text/javascript">
+                        endpoint_minerals = 'http://127.0.0.1:8000/chart/minerals/' + pot_id + '/' + plant_id;
+                        function loadChart_minerals(chart, endpoint_minerals) {
+                          $.ajax({
+                            url: endpoint_minerals,
+                            type: "GET",
+                            dataType: "json",
+                            success: (jsonResponse) => {
+                              // Extract data from the response
+                              const title = jsonResponse.title;
+                              const labels = jsonResponse.data.labels;
+                              const datasets = jsonResponse.data.datasets;
+    
+                              // Load new data into the chart
+                              chart.options.title.text = title;
+                              chart.options.title.display = true;
+                              chart.data.labels = labels;
+                              datasets.forEach(dataset => {
+                                  chart.data.datasets.push(dataset);
+                              });
+                              chart.update();
+                            },
+                            error: () => console.log("Failed to fetch chart data from " + endpoint_minerals + "!")
+                          });}
+                      </script>
+                      <canvas id="chart_minerals" width="500" height="400"></canvas>
+                    </div>
+                    <div class="tab-pane fade show active" id="pills-minerals-bar" role="tabpanel" aria-labelledby="pills-minerals-tab-bar">
+                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+                      <script type="text/javascript">
+                        endpoint_minerals_bar = 'http://127.0.0.1:8000/chart/minerals/' + pot_id + '/' + plant_id;
+                        function loadChart_minerals_bar(chart, endpoint_minerals_bar) {
+                          $.ajax({
+                            url: endpoint_minerals_bar,
+                            type: "GET",
+                            dataType: "json",
+                            success: (jsonResponse) => {
+                              // Extract data from the response
+                              const title = jsonResponse.title;
+                              const labels = jsonResponse.data.labels;
+                              const datasets = jsonResponse.data.datasets;
+    
+                              // Load new data into the chart
+                              chart.options.title.text = title;
+                              chart.options.title.display = true;
+                              chart.data.labels = labels;
+                              datasets.forEach(dataset => {
+                                  chart.data.datasets.push(dataset);
+                              });
+                              chart.update();
+                            },
+                            error: () => console.log("Failed to fetch chart data from " + endpoint_minerals + "!")
+                          });}
+                      </script>
+                      <canvas id="chart_minerals_bar" width="500" height="400"></canvas>
+                    </div>
+                  </div>
 
-                          // Load new data into the chart
-                          chart.options.title.text = title;
-                          chart.options.title.display = true;
-                          chart.data.labels = labels;
-                          datasets.forEach(dataset => {
-                              chart.data.datasets.push(dataset);
-                          });
-                          chart.update();
-                        },
-                        error: () => console.log("Failed to fetch chart data from " + endpoint_minerals + "!")
-                      });}
-                  </script>
-                  <canvas id="chart_minerals" width="500" height="400"></canvas>
                 </div>
                 <div class="tab-pane fade" id="pills-ph" role="tabpanel" aria-labelledby="pills-ph-tab">
-                  <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-                  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
-                  <script type="text/javascript">
-                    endpoint_ph = 'http://127.0.0.1:8000/chart/ph/' + pot_id + '/' + plant_id;
-                    function loadChart_ph(chart, endpoint_ph) {
-                      $.ajax({
-                        url: endpoint_ph,
-                        type: "GET",
-                        dataType: "json",
-                        success: (jsonResponse) => {
-                          // Extract data from the response
-                          const title = jsonResponse.title;
-                          const labels = jsonResponse.data.labels;
-                          const datasets = jsonResponse.data.datasets;
+                  <ul class="nav nav-pills mb-3" id="pills-tab" role="ph_charts">
+                    <li class="nav-item px-1" role="presentation">
+                      <button class="btn btn-outline-success active" id="pills-ph-tab-line" data-bs-toggle="pill" data-bs-target="#pills-ph-line" type="button" role="tab" aria-controls="pills-ph-line" aria-selected="true">Linijski</button>
+                    </li>
+                    <li class="nav-item px-1" role="presentation">
+                      <button class="btn btn-outline-success" id="pills-ph-tab-bar" data-bs-toggle="pill" data-bs-target="#pills-ph-bar" type="button" role="tab" aria-controls="pills-ph-bar" aria-selected="false">Stupičasti</button>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="pills-tabContent_chart">
+                    <div class="tab-pane fade show active" id="pills-ph-line" role="tabpanel" aria-labelledby="pills-ph-tab-line">
+                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+                      <script type="text/javascript">
+                        endpoint_ph = 'http://127.0.0.1:8000/chart/ph/' + pot_id + '/' + plant_id;
+                        function loadChart_ph(chart, endpoint_ph) {
+                          $.ajax({
+                            url: endpoint_ph,
+                            type: "GET",
+                            dataType: "json",
+                            success: (jsonResponse) => {
+                              // Extract data from the response
+                              const title = jsonResponse.title;
+                              const labels = jsonResponse.data.labels;
+                              const datasets = jsonResponse.data.datasets;
 
-                          // Load new data into the chart
-                          chart.options.title.text = title;
-                          chart.options.title.display = true;
-                          chart.data.labels = labels;
-                          datasets.forEach(dataset => {
-                              chart.data.datasets.push(dataset);
-                          });
-                          chart.update();
-                        },
-                        error: () => console.log("Failed to fetch chart data from " + endpoint_ph + "!")
-                      });}
-                  </script>
-                  <canvas id="chart_ph" width="500" height="400"></canvas>
+                              // Load new data into the chart
+                              chart.options.title.text = title;
+                              chart.options.title.display = true;
+                              chart.data.labels = labels;
+                              datasets.forEach(dataset => {
+                                  chart.data.datasets.push(dataset);
+                              });
+                              chart.update();
+                            },
+                            error: () => console.log("Failed to fetch chart data from " + endpoint_ph + "!")
+                          });}
+                      </script>
+                      <canvas id="chart_ph" width="500" height="400"></canvas>
+                    </div>
+                    <div class="tab-pane fade show" id="pills-ph-bar" role="tabpanel" aria-labelledby="pills-ph-tab-bar">
+                      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+                      <script type="text/javascript">
+                        endpoint_ph_bar = 'http://127.0.0.1:8000/chart/ph/' + pot_id + '/' + plant_id;
+                        function loadChart_ph_bar(chart, endpoint_ph_bar) {
+                          $.ajax({
+                            url: endpoint_ph_bar,
+                            type: "GET",
+                            dataType: "json",
+                            success: (jsonResponse) => {
+                              // Extract data from the response
+                              const title = jsonResponse.title;
+                              const labels = jsonResponse.data.labels;
+                              const datasets = jsonResponse.data.datasets;
+
+                              // Load new data into the chart
+                              chart.options.title.text = title;
+                              chart.options.title.display = true;
+                              chart.data.labels = labels;
+                              datasets.forEach(dataset => {
+                                  chart.data.datasets.push(dataset);
+                              });
+                              chart.update();
+                            },
+                            error: () => console.log("Failed to fetch chart data from " + endpoint_ph_bar + "!")
+                          });}
+                      </script>
+                      <canvas id="chart_ph_bar" width="500" height="400"></canvas>
+                    </div>
+                  </div>
+                  
                   <script>
                     window.onload = function() {   
                       let phCtx = document.getElementById("chart_ph").getContext("2d");
@@ -305,6 +473,14 @@
                         }
                       });
                       loadChart_ph(ph, endpoint_ph)
+                      let phCtx_bar = document.getElementById("chart_ph_bar").getContext("2d");
+                      let ph_bar = new Chart(phCtx_bar, {
+                        type: "bar",
+                        options: {
+                          responsive: true,
+                        }
+                      });
+                      loadChart_ph_bar(ph_bar, endpoint_ph_bar)
                       let mineralsCtx = document.getElementById("chart_minerals").getContext("2d");
                       let minerals = new Chart(mineralsCtx, {
                         type: "line",
@@ -313,6 +489,15 @@
                         }
                       });
                       loadChart_minerals(minerals, endpoint_minerals)
+                      let mineralsCtx_bar = document.getElementById("chart_minerals_bar").getContext("2d");
+                      let minerals_bar = new Chart(mineralsCtx_bar, {
+                        type: "bar",
+                        options: {
+                          responsive: true,
+                        }
+                      });
+                      loadChart_minerals_bar(minerals_bar, endpoint_minerals)
+                      
                       let luxCtx = document.getElementById("chart_lux").getContext("2d");
                       let lux = new Chart(luxCtx, {
                         type: "line",
@@ -321,6 +506,14 @@
                         }
                       });
                       loadChart_lux(lux, endpoint_lux)
+                      let luxCtx_bar = document.getElementById("chart_lux_bar").getContext("2d");
+                      let lux_bar = new Chart(luxCtx_bar, {
+                        type: "bar",
+                        options: {
+                          responsive: true,
+                        }
+                      });
+                      loadChart_lux_bar(lux_bar, endpoint_lux_bar)
                       let humidityCtx = document.getElementById("chart_humidty").getContext("2d");
                       let humidity = new Chart(humidityCtx, {
                         type: "line",
@@ -329,6 +522,14 @@
                         }
                       });
                       loadChart_humidity(humidity, endpoint_humidity)
+                      let humidityCtx_bar = document.getElementById("chart_humidty_bar").getContext("2d");
+                      let humidity_bar = new Chart(humidityCtx_bar, {
+                        type: "bar",
+                        options: {
+                          responsive: true,
+                        }
+                      });
+                      loadChart_humidity_bar(humidity_bar, endpoint_humidity_bar)
                     };
                   </script>
                 </div>
@@ -336,10 +537,6 @@
             </div>
 
           </div>
-          
-
-
-
         </div>
     </div>
     {% else %}
