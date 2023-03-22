@@ -31,3 +31,5 @@ Instancirati server:
   python manage.py runserver
   
 Za pregled i korištenje aplikacije posjetite http://algebrav1.pythonanywhere.com/
+Korisničko ime : Algebra
+Lozinka : Algebra
