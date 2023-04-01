@@ -32,4 +32,4 @@ Instancirati server:
   
 Za pregled i korištenje aplikacije posjetite http://algebrav1.pythonanywhere.com/
 Korisničko ime : Algebra
-Lozinka : Algebra
+Lozinka : Algebra28032023
